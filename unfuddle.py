@@ -48,3 +48,11 @@ class Unfuddle(object):
     def generate_dynamic_report(self, project_id, query=None):
         url = "projects/%s/ticket_reports/dynamic"
         return self.get(url % project_id, query)
+
+    def get_time_invested(self, project_id, query=None):
+        url = "projects/%s/time_invested"
+        return self.get(url % project_id, query)
+
+    def get_time_entries(self, project_id, ticket_id):
+        url = "projects/%s/tickets/%s/time_entries"
+        return self.get(url % (project_id, ticket_id))

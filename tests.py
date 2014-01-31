@@ -5,7 +5,7 @@ import logging
 import unfuddle
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.WARN)
 
 
 class UnfuddleTestCase(unittest.TestCase):
@@ -59,3 +59,26 @@ class TestTicketReports(UnfuddleTestCase):
         }
         report = self.ufd.generate_dynamic_report(project_id, query)
         logger.debug("ticket report: %r", report)
+
+
+class TestTimeTracking(UnfuddleTestCase):
+
+    def test_time_entries(self):
+        projects = self.ufd.get_projects()
+        seb_project, = [p for p in projects if "SEB website" in p['title']]
+        project_id = seb_project['id']
+        ticket_id = list(self.ufd.get_tickets(project_id))[0]['id']
+        entries = self.ufd.get_time_entries(project_id, ticket_id)
+        logger.debug("entries: %r", entries)
+
+    def test_time_invested(self):
+        projects = self.ufd.get_projects()
+        seb_project, = [p for p in projects if "SEB website" in p['title']]
+        project_id = seb_project['id']
+        query = {
+            'group_by': 'ticket',
+            'start_date': '2014/1/1',
+            'end_date': '2014/1/31',
+        }
+        report = self.ufd.get_time_invested(project_id, query)
+        logger.debug("time invested: %r", report)
