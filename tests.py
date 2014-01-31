@@ -7,11 +7,14 @@ import unfuddle
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
+
 class UnfuddleTestCase(unittest.TestCase):
 
+    def get_credentials(self):
+        return netrc.netrc().authenticators("unfuddle.com")
+
     def setUp(self):
-        host = "unfuddle.com"
-        username, account, password = netrc.netrc().authenticators(host)
+        username, account, password = self.get_credentials()
         self.ufd = unfuddle.Unfuddle(account, username, password)
 
 
