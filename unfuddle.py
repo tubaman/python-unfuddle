@@ -34,6 +34,10 @@ class Unfuddle(object):
             for ticket in tickets:
                 yield ticket
 
+    def get_ticket(self, project_id, ticket_id):
+        url = "projects/%s/tickets/%s"
+        return self.get(url % (project_id, ticket_id))
+
     def get_ticket_reports(self, project_id):
         return self.get("projects/%s/ticket_reports" % project_id)
 

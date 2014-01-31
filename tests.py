@@ -33,6 +33,11 @@ class TestTickets(UnfuddleTestCase):
         project_id = self.ufd.get_projects()[0]['id']
         self.ufd.get_tickets(project_id)
 
+    def test_get_ticket(self):
+        project_id = self.ufd.get_projects()[0]['id']
+        ticket_id = list(self.ufd.get_tickets(project_id))[0]['id']
+        self.ufd.get_ticket(project_id, ticket_id)
+
 
 class TestTicketReports(UnfuddleTestCase):
     def test_ticket_reports(self):
