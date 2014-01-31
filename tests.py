@@ -52,7 +52,7 @@ class TestTicketReports(UnfuddleTestCase):
         project_id = self.ufd.get_projects()[0]['id']
         query = {
             'title': 'open ticket report',
-            'conditions': 'status-neq-closed,status-neq-resolved',
+            'conditions_string': 'status-neq-closed,status-neq-resolved',
         }
         report = self.ufd.generate_dynamic_report(project_id, query)
         logger.debug("ticket report: %r", report)
