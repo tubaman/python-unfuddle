@@ -1,3 +1,5 @@
+from itertools import count
+
 import requests
 
 
@@ -24,4 +26,25 @@ class Unfuddle(object):
         return self.get("projects")
 
     def get_tickets(self, project_id):
-        return self.get("projects/%s/tickets" % project_id)
+        for page in count(1):
+            tickets = self.get("projects/%s/tickets" % project_id,
+                               query={'page': str(page), 'limit': 100})
+            if not tickets:
+                break
+            for ticket in tickets:
+                yield ticket
+
+    def get_ticket_reports(self, project_id):
+        return self.get("projects/%s/ticket_reports" % project_id)
+
+    def get_ticket_report(self, project_id, report_id):
+        url = "projects/%s/ticket_reports/%s"
+        return self.get(url % (project_id, report_id))
+
+    def generate_ticket_report(self, project_id, report_id):
+        url = "projects/%s/ticket_reports/%s/generate"
+        return self.get(url % (project_id, report_id))
+
+    def generate_dynamic_report(self, project_id, query=None):
+        url = "projects/%s/ticket_reports/dynamic"
+        return self.get(url % project_id, query)
