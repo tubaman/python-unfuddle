@@ -87,3 +87,10 @@ class TestTimeTracking(UnfuddleTestCase):
         }
         report = self.ufd.get_time_invested(project_id, query)
         logger.debug("time invested: %r", report)
+
+
+class TestSeverities(UnfuddleTestCase):
+
+    def test_severities(self):
+        project_id = self.ufd.get_projects()[0]['id']
+        self.ufd.get_severities(project_id)

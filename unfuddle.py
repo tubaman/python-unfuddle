@@ -60,3 +60,7 @@ class Unfuddle(object):
     def get_time_entries(self, project_id, ticket_id):
         url = "projects/%s/tickets/%s/time_entries"
         return self.get(url % (project_id, ticket_id))
+
+    def get_severities(self, project_id):
+        url = "projects/%s/severities"
+        return self.get(url % project_id)
