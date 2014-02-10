@@ -38,6 +38,19 @@ class TestTickets(UnfuddleTestCase):
         ticket_id = list(self.ufd.get_tickets(project_id))[0]['id']
         self.ufd.get_ticket(project_id, ticket_id)
 
+    def test_get_ticket_by_number(self):
+        project_id = self.ufd.get_projects()[0]['id']
+        ticket_num = list(self.ufd.get_tickets(project_id))[0]['number']
+        self.ufd.get_ticket_by_number(project_id, ticket_num)
+
+    def test_ticket_html_url(self):
+        project_id = self.ufd.get_projects()[0]['id']
+        ticket_num = list(self.ufd.get_tickets(project_id))[0]['number']
+        url = "%s/a#/projects/%s/tickets/by_number/%s"
+        expected = "https://keyingredient.unfuddle.com/a#/projects/%s/tickets/by_number/%s" % (project_id, ticket_num)
+        actual = self.ufd.ticket_html_url(project_id, ticket_num)
+        self.assertEqual(actual, expected)
+
 
 class TestTicketReports(UnfuddleTestCase):
     def test_ticket_reports(self):

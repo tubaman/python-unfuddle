@@ -1,6 +1,12 @@
+import json
+import re
+import logging
 from itertools import count
 
 import requests
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
 
 class Unfuddle(object):
@@ -19,8 +25,22 @@ class Unfuddle(object):
 
     def get(self, path, query=None):
         r = self.s.get(self.url_prefix + path, data=query)
-        assert r.status_code == 200
+        assert r.status_code == 200, "GET error %d: %s" % (r.status_code,
+                                                           r.text)
         return r.json()
+
+    def post(self, path, xmldata=None):
+        logger.debug("xmldata: %s" % xmldata)
+        headers = {
+            'content-type': 'application/xml',
+            'accept': 'application/json'
+        }
+        r = self.s.post(self.url_prefix + path, data=xmldata,
+            headers=headers)
+        assert r.status_code == 201, "POST error %d: %s" % (r.status_code,
+                                                           r.text)
+        created_url = r.headers['location']
+        return created_url
 
     def get_projects(self):
         return self.get("projects")
@@ -37,6 +57,27 @@ class Unfuddle(object):
     def get_ticket(self, project_id, ticket_id):
         url = "projects/%s/tickets/%s"
         return self.get(url % (project_id, ticket_id))
+
+    def get_ticket_by_number(self, project_id, ticket_num):
+        url = "projects/%s/tickets/by_number/%s"
+        return self.get(url % (project_id, ticket_num))
+
+    def ticket_html_url(self, project_id, ticket_num):
+        url = "%s/a#/projects/%s/tickets/by_number/%s"
+        return url % (self.base_url, project_id, ticket_num)
+
+    def create_ticket(self, project_id, data):
+        url = "projects/%s/tickets"
+        xmldata = ""
+        xmldata += "<ticket>"
+        for key, value in data.items():
+            xmldata += "<%s>%s</%s>" % (key, value, key)
+        xmldata += "</ticket>"
+        created_url = self.post(url % project_id, xmldata)
+        url_re = "%s/projects/(.*)/tickets/(.*)" % self.base_url
+        project_id, ticket_id = re.match(url_re, created_url).groups()
+        ticket_id = int(ticket_id)
+        return ticket_id
 
     def get_ticket_reports(self, project_id):
         return self.get("projects/%s/ticket_reports" % project_id)
