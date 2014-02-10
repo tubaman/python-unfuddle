@@ -6,7 +6,7 @@ from itertools import count
 import requests
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.WARN)
 
 
 class Unfuddle(object):
