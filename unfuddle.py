@@ -102,6 +102,20 @@ class Unfuddle(object):
         url = "projects/%s/tickets/%s/time_entries"
         return self.get(url % (project_id, ticket_id))
 
+    def create_time_entry(self, project_id, ticket_id, data):
+        url = "projects/%s/tickets/%s/time_entries"
+        xmldata = ""
+        xmldata += "<time-entry>"
+        for key, value in data.items():
+            xmldata += "<%s>%s</%s>" % (key, value, key)
+        xmldata += "</time-entry>"
+        created_url = self.post(url % (project_id, ticket_id), xmldata)
+        url_re = "%s/projects/.*/tickets/.*/time_entries/(.*)" % \
+            self.base_url
+        entry_id, = re.match(url_re, created_url).groups()
+        entry_id = int(entry_id)
+        return entry_id
+
     def get_severities(self, project_id):
         url = "projects/%s/severities"
         return self.get(url % project_id)
