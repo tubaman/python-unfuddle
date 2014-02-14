@@ -35,7 +35,7 @@ class Unfuddle(object):
             'content-type': 'application/xml',
             'accept': 'application/json'
         }
-        r = self.s.post(self.url_prefix + path, data=xmldata,
+        r = self.s.post(self.url_prefix + path, data=xmldata.encode('utf-8'),
             headers=headers)
         assert r.status_code == 201, "POST error %d: %s" % (r.status_code,
                                                            r.text)
