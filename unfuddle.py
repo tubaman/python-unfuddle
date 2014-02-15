@@ -42,6 +42,17 @@ class Unfuddle(object):
         created_url = r.headers['location']
         return created_url
 
+    def put(self, path, xmldata=None):
+        logger.debug("xmldata: %s" % xmldata)
+        headers = {
+            'content-type': 'application/xml',
+            'accept': 'application/json'
+        }
+        r = self.s.put(self.url_prefix + path, data=xmldata.encode('utf-8'),
+            headers=headers)
+        assert r.status_code == 200, "PUT error %d: %s" % (r.status_code,
+                                                           r.text)
+
     def get_projects(self):
         return self.get("projects")
 
@@ -78,6 +89,15 @@ class Unfuddle(object):
         project_id, ticket_id = re.match(url_re, created_url).groups()
         ticket_id = int(ticket_id)
         return ticket_id
+
+    def update_ticket(self, project_id, ticket_id, data):
+        url = "projects/%s/tickets/%s"
+        xmldata = ""
+        xmldata += "<ticket>"
+        for key, value in data.items():
+            xmldata += "<%s>%s</%s>" % (key, value, key)
+        xmldata += "</ticket>"
+        self.put(url % (project_id, ticket_id), xmldata)
 
     def get_ticket_reports(self, project_id):
         return self.get("projects/%s/ticket_reports" % project_id)
