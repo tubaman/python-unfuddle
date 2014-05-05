@@ -54,13 +54,21 @@ class TestTickets(UnfuddleTestCase):
 
 class TestTicketReports(UnfuddleTestCase):
     def test_ticket_reports(self):
+        reports = self.ufd.get_ticket_reports()
+
+    def test_ticket_report(self):
+        report_id = self.ufd.get_ticket_reports()[0]['id']
+        report = self.ufd.get_ticket_report(report_id)
+        logger.debug("ticket report: %r", report)
+
+    def test_project_ticket_reports(self):
         project_id = self.ufd.get_projects()[0]['id']
         reports = self.ufd.get_ticket_reports(project_id)
 
-    def test_ticket_report(self):
+    def test_project_ticket_report(self):
         project_id = self.ufd.get_projects()[0]['id']
         report_id = self.ufd.get_ticket_reports(project_id)[0]['id']
-        report = self.ufd.get_ticket_report(project_id, report_id)
+        report = self.ufd.get_ticket_report(report_id, project_id)
         logger.debug("ticket report: %r", report)
 
     def test_generate_ticket_report(self):

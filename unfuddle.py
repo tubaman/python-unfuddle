@@ -99,12 +99,19 @@ class Unfuddle(object):
         xmldata += "</ticket>"
         self.put(url % (project_id, ticket_id), xmldata)
 
-    def get_ticket_reports(self, project_id):
-        return self.get("projects/%s/ticket_reports" % project_id)
+    def get_ticket_reports(self, project_id=None):
+        if project_id is None:
+            return self.get("ticket_reports")
+        else:
+            return self.get("projects/%s/ticket_reports" % project_id)
 
-    def get_ticket_report(self, project_id, report_id):
-        url = "projects/%s/ticket_reports/%s"
-        return self.get(url % (project_id, report_id))
+    def get_ticket_report(self, report_id, project_id=None):
+        if project_id is None:
+            url = "ticket_reports/%s"
+            return self.get(url % report_id)
+        else:
+            url = "projects/%s/ticket_reports/%s"
+            return self.get(url % (project_id, report_id))
 
     def generate_ticket_report(self, project_id, report_id):
         url = "projects/%s/ticket_reports/%s/generate"
