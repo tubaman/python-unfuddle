@@ -113,9 +113,13 @@ class Unfuddle(object):
             url = "projects/%s/ticket_reports/%s"
             return self.get(url % (project_id, report_id))
 
-    def generate_ticket_report(self, project_id, report_id):
-        url = "projects/%s/ticket_reports/%s/generate"
-        return self.get(url % (project_id, report_id))
+    def generate_ticket_report(self, report_id, project_id=None):
+        if project_id is None:
+            url = "ticket_reports/%s/generate"
+            return self.get(url % report_id)
+        else:
+            url = "projects/%s/ticket_reports/%s/generate"
+            return self.get(url % (project_id, report_id))
 
     def generate_dynamic_report(self, project_id, query=None):
         url = "projects/%s/ticket_reports/dynamic"
