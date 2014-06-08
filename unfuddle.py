@@ -21,10 +21,10 @@ class Unfuddle(object):
         self.url_prefix = self.base_url + self.BASE_PATH
         self.s = requests.Session()
         self.s.auth = (username, password)
-        self.s.headers = {'accept': 'application/json'}
 
     def get(self, path, query=None):
-        r = self.s.get(self.url_prefix + path, data=query)
+        headers = {'accept': 'application/json'}
+        r = self.s.get(self.url_prefix + path, data=query, headers=headers)
         assert r.status_code == 200, "GET error %d: %s" % (r.status_code,
                                                            r.text)
         return r.json()
