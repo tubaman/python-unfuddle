@@ -4,7 +4,7 @@ Here's a python wrapper around the Unfuddle API.
 
 ## Example
 
-```
+```python
 from unfuddle import Unfuddle
 
 unf = Unfuddle(account, username, password)
