@@ -46,8 +46,8 @@ class TestTickets(UnfuddleTestCase):
     def test_ticket_html_url(self):
         project_id = self.ufd.get_projects()[0]['id']
         ticket_num = list(self.ufd.get_tickets(project_id))[0]['number']
-        url = "%s/a#/projects/%s/tickets/by_number/%s"
-        expected = "https://keyingredient.unfuddle.com/a#/projects/%s/tickets/by_number/%s" % (project_id, ticket_num)
+        url = "https://%s.unfuddle.com/a#/projects/%s/tickets/by_number/%s"
+        expected = url % ('keyingredient', project_id, ticket_num)
         actual = self.ufd.ticket_html_url(project_id, ticket_num)
         self.assertEqual(actual, expected)
 
