@@ -53,6 +53,14 @@ class Unfuddle(object):
         assert r.status_code == 200, "PUT error %d: %s" % (r.status_code,
                                                            r.text)
 
+    def delete(self, path):
+        headers = {
+            'accept': 'application/json'
+        }
+        r = self.s.delete(self.url_prefix + path, headers=headers)
+        assert r.status_code == 200, "DELETE error %d: %s" % (r.status_code,
+                                                              r.text)
+
     def get_projects(self):
         return self.get("projects")
 
@@ -146,6 +154,10 @@ class Unfuddle(object):
         entry_id, = re.match(url_re, created_url).groups()
         entry_id = int(entry_id)
         return entry_id
+
+    def delete_time_entry(self, project_id, ticket_id, entry_id):
+        url = "projects/%s/tickets/%s/time_entries/%s"
+        self.delete(url % (project_id, ticket_id, entry_id))
 
     def get_severities(self, project_id):
         url = "projects/%s/severities"
