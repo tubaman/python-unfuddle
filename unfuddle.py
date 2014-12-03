@@ -162,3 +162,15 @@ class Unfuddle(object):
     def get_severities(self, project_id):
         url = "projects/%s/severities"
         return self.get(url % project_id)
+
+    def get_milestones(self, project_id=None, subset=None):
+        url = "milestones"
+        if project_id:
+            url = ("projects/%s/" % project_id) + url
+        if subset:
+            url += "/%s" % subset
+        return self.get(url)
+
+    def get_milestone(self, project_id, milestone_id):
+            url = "projects/%s/milestones/%s"
+            return self.get(url % (project_id, milestone_id))

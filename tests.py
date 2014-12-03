@@ -120,3 +120,22 @@ class TestSeverities(UnfuddleTestCase):
     def test_severities(self):
         project_id = self.ufd.get_projects()[0]['id']
         self.ufd.get_severities(project_id)
+
+
+class TestMilestones(UnfuddleTestCase):
+
+    def test_milestones(self):
+        self.ufd.get_milestones()
+
+    def test_project_milestones(self):
+        project_id = self.ufd.get_projects()[0]['id']
+        self.ufd.get_milestones(project_id=project_id)
+
+    def test_subset_milestones(self):
+        self.ufd.get_milestones(subset='upcoming')
+
+    def test_milestone(self):
+        milestones = self.ufd.get_milestones(subset='upcoming')
+        project_id = milestones[0]['project_id']
+        milestone_id = milestones[0]['id']
+        milestone = self.ufd.get_milestone(project_id, milestone_id)
