@@ -139,3 +139,10 @@ class TestMilestones(UnfuddleTestCase):
         project_id = milestones[0]['project_id']
         milestone_id = milestones[0]['id']
         milestone = self.ufd.get_milestone(project_id, milestone_id)
+
+
+class TestToXml(unittest.TestCase):
+
+    def test_to_xml(self):
+        xml = unfuddle.to_xml('blah', {'foo': 'bar'})
+        self.assertEquals(xml, "<blah><foo>bar</foo></blah>")

@@ -16,7 +16,7 @@ def to_xml(tag, data):
     for key, value in data.items():
         el = ET.SubElement(root, key)
         el.text = value
-    return ET.dump(root)
+    return ET.tostring(root, encoding="utf-8")
 
 
 class Unfuddle(object):
