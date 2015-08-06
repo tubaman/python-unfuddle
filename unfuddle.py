@@ -2,11 +2,21 @@ import json
 import re
 import logging
 from itertools import count
+from xml.etree import ElementTree as ET
 
 import requests
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.WARN)
+
+
+def to_xml(tag, data):
+    """Format data as XML"""
+    root = ET.Element(tag)
+    for key, value in data.items():
+        el = ET.SubElement(root, key)
+        el.text = value
+    return ET.dump(root)
 
 
 class Unfuddle(object):
@@ -87,11 +97,7 @@ class Unfuddle(object):
 
     def create_ticket(self, project_id, data):
         url = "projects/%s/tickets"
-        xmldata = ""
-        xmldata += "<ticket>"
-        for key, value in data.items():
-            xmldata += "<%s>%s</%s>" % (key, value, key)
-        xmldata += "</ticket>"
+        xmldata = to_xml("ticket", data)
         created_url = self.post(url % project_id, xmldata)
         url_re = "%s/projects/(.*)/tickets/(.*)" % self.base_url
         project_id, ticket_id = re.match(url_re, created_url).groups()
@@ -100,11 +106,7 @@ class Unfuddle(object):
 
     def update_ticket(self, project_id, ticket_id, data):
         url = "projects/%s/tickets/%s"
-        xmldata = ""
-        xmldata += "<ticket>"
-        for key, value in data.items():
-            xmldata += "<%s>%s</%s>" % (key, value, key)
-        xmldata += "</ticket>"
+        xmldata = to_xml("ticket", data)
         self.put(url % (project_id, ticket_id), xmldata)
 
     def get_ticket_reports(self, project_id=None):
@@ -143,11 +145,7 @@ class Unfuddle(object):
 
     def create_time_entry(self, project_id, ticket_id, data):
         url = "projects/%s/tickets/%s/time_entries"
-        xmldata = ""
-        xmldata += "<time-entry>"
-        for key, value in data.items():
-            xmldata += "<%s>%s</%s>" % (key, value, key)
-        xmldata += "</time-entry>"
+        xmldata = to_xml("time-entry", data)
         created_url = self.post(url % (project_id, ticket_id), xmldata)
         url_re = "%s/projects/.*/tickets/.*/time_entries/(.*)" % \
             self.base_url
