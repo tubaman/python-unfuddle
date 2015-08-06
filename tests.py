@@ -146,3 +146,7 @@ class TestToXml(unittest.TestCase):
     def test_to_xml(self):
         xml = unfuddle.to_xml('blah', {'foo': 'bar'})
         self.assertEquals(xml, "<blah><foo>bar</foo></blah>")
+
+    def test_to_xml_with_float(self):
+        xml = unfuddle.to_xml('blah', {'foo': 0.333333})
+        self.assertEquals(xml, "<blah><foo>0.333333</foo></blah>")

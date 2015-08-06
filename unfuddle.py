@@ -15,7 +15,7 @@ def to_xml(tag, data):
     root = ET.Element(tag)
     for key, value in data.items():
         el = ET.SubElement(root, key)
-        el.text = value
+        el.text = unicode(value)
     return ET.tostring(root, encoding="utf-8")
 
 
