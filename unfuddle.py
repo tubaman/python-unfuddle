@@ -172,3 +172,9 @@ class Unfuddle(object):
     def get_milestone(self, project_id, milestone_id):
             url = "projects/%s/milestones/%s"
             return self.get(url % (project_id, milestone_id))
+
+    def get_custom_field_values(self, project_id, field_id=None):
+        url = "projects/%s/custom_field_values" % project_id
+        if field_id:
+            url = url + ("/%s" % field_id)
+        return self.get(url)
