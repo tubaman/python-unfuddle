@@ -29,12 +29,12 @@ class Unfuddle(object):
         self.password = password
         self.base_url = "https://%s.unfuddle.com" % account
         self.url_prefix = self.base_url + self.BASE_PATH
-        self.s = requests.Session()
-        self.s.auth = (username, password)
+        self.session = requests.Session()
+        self.session.auth = (username, password)
 
     def get(self, path, query=None):
         headers = {'accept': 'application/json'}
-        r = self.s.get(self.url_prefix + path, data=query, headers=headers)
+        r = self.session.get(self.url_prefix + path, data=query, headers=headers)
         assert r.status_code == 200, "GET error %d: %s" % (r.status_code,
                                                            r.text)
         return r.json()
@@ -45,7 +45,7 @@ class Unfuddle(object):
             'content-type': 'application/xml',
             'accept': 'application/json'
         }
-        r = self.s.post(self.url_prefix + path, data=xmldata.encode('utf-8'),
+        r = self.session.post(self.url_prefix + path, data=xmldata.encode('utf-8'),
             headers=headers)
         assert r.status_code == 201, "POST error %d: %s" % (r.status_code,
                                                            r.text)
@@ -58,7 +58,7 @@ class Unfuddle(object):
             'content-type': 'application/xml',
             'accept': 'application/json'
         }
-        r = self.s.put(self.url_prefix + path, data=xmldata.encode('utf-8'),
+        r = self.session.put(self.url_prefix + path, data=xmldata.encode('utf-8'),
             headers=headers)
         assert r.status_code == 200, "PUT error %d: %s" % (r.status_code,
                                                            r.text)
@@ -67,7 +67,7 @@ class Unfuddle(object):
         headers = {
             'accept': 'application/json'
         }
-        r = self.s.delete(self.url_prefix + path, headers=headers)
+        r = self.session.delete(self.url_prefix + path, headers=headers)
         assert r.status_code == 200, "DELETE error %d: %s" % (r.status_code,
                                                               r.text)
 
