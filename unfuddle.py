@@ -34,10 +34,10 @@ class Unfuddle(object):
 
     def get(self, path, query=None):
         headers = {'accept': 'application/json'}
-        r = self.session.get(self.url_prefix + path, data=query, headers=headers)
-        assert r.status_code == 200, "GET error %d: %s" % (r.status_code,
-                                                           r.text)
-        return r.json()
+        response = self.session.get(self.url_prefix + path, data=query, headers=headers)
+        assert response.status_code == 200, "GET error %d: %s" % (response.status_code,
+                                                                  response.text)
+        return response.json()
 
     def post(self, path, xmldata=None):
         logger.debug("xmldata: %s" % xmldata)
@@ -45,11 +45,11 @@ class Unfuddle(object):
             'content-type': 'application/xml',
             'accept': 'application/json'
         }
-        r = self.session.post(self.url_prefix + path, data=xmldata.encode('utf-8'),
+        response = self.session.post(self.url_prefix + path, data=xmldata.encode('utf-8'),
             headers=headers)
-        assert r.status_code == 201, "POST error %d: %s" % (r.status_code,
-                                                           r.text)
-        created_url = r.headers['location']
+        assert response.status_code == 201, "POST error %d: %s" % (response.status_code,
+                                                                   response.text)
+        created_url = response.headers['location']
         return created_url
 
     def put(self, path, xmldata=None):
@@ -58,18 +58,18 @@ class Unfuddle(object):
             'content-type': 'application/xml',
             'accept': 'application/json'
         }
-        r = self.session.put(self.url_prefix + path, data=xmldata.encode('utf-8'),
+        response = self.session.put(self.url_prefix + path, data=xmldata.encode('utf-8'),
             headers=headers)
-        assert r.status_code == 200, "PUT error %d: %s" % (r.status_code,
-                                                           r.text)
+        assert response.status_code == 200, "PUT error %d: %s" % (response.status_code,
+                                                                  response.text)
 
     def delete(self, path):
         headers = {
             'accept': 'application/json'
         }
-        r = self.session.delete(self.url_prefix + path, headers=headers)
-        assert r.status_code == 200, "DELETE error %d: %s" % (r.status_code,
-                                                              r.text)
+        response = self.session.delete(self.url_prefix + path, headers=headers)
+        assert response.status_code == 200, "DELETE error %d: %s" % (response.status_code,
+                                                                     response.text)
 
     def get_projects(self):
         return self.get("projects")
